@@ -1,4 +1,4 @@
-call plug#begin('~/.vim/plugged')
+call plug#begin('/home/rshang97/.vim/plugged')
 
 "declare the list of plugins"
 Plug 'scrooloose/syntastic'
@@ -6,9 +6,12 @@ Plug 'yggdroot/indentline'
 Plug 'valloric/youcompleteme'
 Plug 'tpope/vim-surround'
 Plug 'scrooloose/nerdcommenter'
+Plug 'junegunn/fzf', { 'dir': '/home/rshang97/.fzf', 'do': './install --all'}
+Plug 'vim-scripts/auto-pairs-gentle'
 
+" typescript syntax
+Plug 'leafgarland/typescript-vim'
 call plug#end()
-
 
 let mapleader=","
 set number
@@ -17,6 +20,12 @@ set number
 nnoremap ; :
 vnoremap ; :
 
+"set J to Control D 
+nnoremap J 25j
+vnoremap J 25j
+
+nnoremap K 25k
+vnoremap K 25k
 
 colorscheme elflord
 
@@ -30,15 +39,9 @@ highlight LineNr ctermfg=grey
 set autoindent
 set shiftwidth=4
 set tabstop=4
-set softtabstop=0 noexpandtab
+set softtabstop=0 
+set expandtab
 set smartindent
-
-
-" Double-j
-inoremap jk <Esc>"
-
-"sets command window height to two inches"
-set cmdheight=2
 
 
 "visually say when things go wrong"
@@ -55,51 +58,17 @@ set smartcase
 
 set mouse=a
 
-
 "remap to dd to black hole  register" 
-"
 noremap dd "_dd
 vnoremap dd "_dd
 
+nnoremap gm :call cursor(0, len(getline('.')) / 2)<cr>
 
-inoremap ( ()<Esc>i
-inoremap [ []<Esc>i
-inoremap { {<CR>}<Esc>O
-autocmd Syntax html,vim inoremap < <lt>><Esc>i| inoremap > <c-r>=ClosePair('>')<CR>
-inoremap ) <c-r>=ClosePair(')')<CR>
-inoremap ] <c-r>=ClosePair(']')<CR>
-inoremap } <c-r>=CloseBracket()<CR>
-inoremap " <c-r>=QuoteDelim('"')<CR>
-inoremap ' <c-r>=QuoteDelim("'")<CR>
+let g:ycm_autoclose_preview_window_after_completion = 1
+let g:ycm_autoclose_preview_window_after_insertion = 1
 
-function ClosePair(char)
- if getline('.')[col('.') - 1] == a:char
-      return "\<Right>"
-       else
-            return a:char
-             endif
-             endf
+set completeopt-=preview
+command! Goto YcmCompleter GoToDefinition
+let g:ycm_min_num_of_chars_for_completion = 1
 
-             function CloseBracket()
-              if match(getline(line('.') + 1), '\s*}') < 0
-                   return "\<CR>}"
-                    else
-                         return "\<Esc>j0f}a"
-                          endif
-                          endf
-
-                          function QuoteDelim(char)
-                           let line = getline('.')
-                            let col = col('.')
-                             if line[col - 2] == "\\"
-                                  "Inserting a quoted quotation mark into the string
-                                   return a:char
-                                    elseif line[col - 1] == a:char
-                                     "Escaping out of the string
-                                      return "\<Right>"
-                                       else
-                                        "Starting a string
-                                         return a:char.a:char."\<Esc>i"
-                                          endif
-                                          endf
-
+nnoremap f :tab split \| YcmCompleter GoToDefinition

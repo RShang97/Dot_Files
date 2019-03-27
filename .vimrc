@@ -80,7 +80,7 @@ highlight LineNr ctermfg=LightGray
 
 "highlight current cursor line
 " todo figure out how colors work
-highlight CursorLine cterm=NONE ctermbg=DarkGray
+highlight CursorLine cterm=NONE ctermbg=237
 set cursorline
 
 "auto indent the next line to match the current one
@@ -116,3 +116,6 @@ vnoremap dd "_dd
 
 "go to middle of line
 nnoremap gm :call cursor(0, len(getline('.')) / 2)<cr>
+
+"indent line color 
+let g:indentLine_color_term=15

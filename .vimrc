@@ -1,74 +1,118 @@
-call plug#begin('/home/rshang97/.vim/plugged')
+if empty(glob('~/.vim/autoload/plug.vim'))
+      silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
+          \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+        autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
+    endif
+
+
+call plug#begin('/home/richard/.vim/plugged')
 
 "declare the list of plugins"
-Plug 'scrooloose/syntastic'
 Plug 'yggdroot/indentline'
 Plug 'valloric/youcompleteme'
-Plug 'tpope/vim-surround'
 Plug 'scrooloose/nerdcommenter'
-Plug 'junegunn/fzf', { 'dir': '/home/rshang97/.fzf', 'do': './install --all'}
+Plug 'junegunn/fzf', { 'dir': '/home/richard/.fzf', 'do': './install --all'}
 Plug 'vim-scripts/auto-pairs-gentle'
+Plug 'itchyny/lightline.vim'
 
-" typescript syntax
-Plug 'leafgarland/typescript-vim'
 call plug#end()
 
+"""""""""""""""""""""""""""ycm options""""""""""""""""""""""""""
+
+".ycm_extra_conf.py location
+let g:ycm_global_ycm_extra_conf = '~/.ycm_extra_conf.py'
+"
+let g:ycm_autoclose_preview_window_after_completion=1
+let g:ycm_autoclose_preview_window_after_insertion=1
+
+"set completeopt-=preview
+command! Goto YcmCompleter GoToDefinition
+let g:ycm_min_num_of_chars_for_completion=1
+
+nnoremap f :tab split \| YcmCompleter GoToDefinition
+
+""""""""""""""""""""""""""""""end ycm options"""""""""""""""""""""""""""
+
+"lightline
+set laststatus=2
+set noshowmode
+
+set nocompatible
+
+" copy an paste to other programs
+vnoremap <C-c> "+y
+map <C-v> "+P
+
+"change the map leader to comma 
 let mapleader=","
-set number
+
+" show line numbers on side
+set number 
 
 "set : to ;"
 nnoremap ; :
 vnoremap ; :
 
-"set J to Control D 
+"faster movement
 nnoremap J 25j
 vnoremap J 25j
 
 nnoremap K 25k
 vnoremap K 25k
 
+"show colorscheme
 colorscheme elflord
 
-set showmatch
+"start searching when i type
 set incsearch
+
+"search highlighting
 set hlsearch
+
+"colors for dark backgrounds
 set background=dark
 
-highlight LineNr ctermfg=grey
+"syntax highlighting
+syntax on
 
-set autoindent
-set shiftwidth=4
-set tabstop=4
-set softtabstop=0 
-set expandtab
-set smartindent
+"highlight current line number, make nums grey
+highlight LineNr ctermfg=LightGray
 
-
-"visually say when things go wrong"
-set visualbell
-
+"highlight current cursor line
+" todo figure out how colors work
+highlight CursorLine cterm=NONE ctermbg=DarkGray
 set cursorline
 
+"auto indent the next line to match the current one
+set autoindent
+
+"indent based off of the language
+set smartindent
+
+"shift by four spaces
+set shiftwidth=4
+
+"a tab is displayed asfour spaces
+set tabstop=4
+
+"a tab is worth four spaces when editing
+set softtabstop=4
+
+"replace tabs with spaces
+set expandtab
+
+" load indent files based on filetype
 filetype indent on
 
-nnoremap gV `[v`]
-
-set ignorecase
+"ignore case unless caps are present
 set smartcase 
 
+"allow mouse usage
 set mouse=a
 
-"remap to dd to black hole  register" 
+"remap to dd to black hole  register
 noremap dd "_dd
 vnoremap dd "_dd
 
+"go to middle of line
 nnoremap gm :call cursor(0, len(getline('.')) / 2)<cr>
-
-let g:ycm_autoclose_preview_window_after_completion = 1
-let g:ycm_autoclose_preview_window_after_insertion = 1
-
-set completeopt-=preview
-command! Goto YcmCompleter GoToDefinition
-let g:ycm_min_num_of_chars_for_completion = 1
-
-nnoremap f :tab split \| YcmCompleter GoToDefinition
